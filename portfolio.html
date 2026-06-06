@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio | Trịnh Hoàng Tú</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* MÀU SẮC & FONT CHỮ CHỦ ĐẠO */
+        :root {
+            --bg-body: #FFFDF8; /* Màu nền kem sáng giống ảnh mẫu */
+            --color-primary: #8C7355; /* Màu nâu / vàng gold */
+            --color-dark: #1A1A1A; /* Màu đen banner/navbar */
+            --color-text: #333333;
+            --color-heading-stylized: #C64F4F; /* Màu đỏ đô cho các tiêu đề cách điệu */
+            --font-main: 'Montserrat', sans-serif;
+            --font-stylized: 'Dancing Script', cursive;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-body);
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        /* NAVIGATION BAR */
+        .navbar {
+            background-color: var(--color-dark);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 50px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .nav-brand {
+            font-weight: 700;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--color-primary);
+        }
+
+        /* BANNER CHUNG */
+        .banner {
+            background-color: #2c2c2c;
+            background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 100px 20px;
+        }
+
+        .banner h1 {
+            font-size: 36px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .banner p {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 16px;
+            color: #E0E0E0;
+        }
+
+        /* KHUNG CHỨA NỘI DUNG */
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* NÚT BẤM (BUTTONS) */
+        .btn {
+            display: inline-block;
+            background-color: var(--color-primary);
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: center;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background-color: #6a563f;
+        }
+
+        /* Bật màu sẫm cho nút Chương đang chọn */
+        .btn.active-tab {
+            background-color: #554431;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.4);
+        }
+
+        /* TIÊU ĐỀ CÁCH ĐIỆU */
+        .stylized-heading {
+            font-family: var(--font-stylized);
+            color: var(--color-heading-stylized);
+            font-size: 38px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+
+        /* --- TRANG CHỦ --- */
+        .home-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        /* --- PHẦN DỰ ÁN SLIDE VÀ KHUNG XEM FILE TRỰC TIẾP --- */
+        .projects-btn-group {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .slide-container {
+            position: relative;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        /* Ẩn mặc định các slide */
+        .exercise-slide {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        /* Hiện slide đang chọn */
+        .exercise-slide.active {
+            display: block;
+        }
+
+        /* Nút ẩn/hiện file PDF chuyên dụng */
+        .toggle-pdf-btn {
+            background-color: #4A5568;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            margin: 15px 0 5px 0;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toggle-pdf-btn:hover {
+            background-color: var(--color-primary);
+        }
+
+        /* Khung chứa PDF có hiệu ứng ẩn hiện mượt */
+        .pdf-wrapper {
+            display: none; /* Mặc định ẩn */
+            margin-top: 15px;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        .pdf-wrapper.visible {
+            display: block;
+        }
+
+        /* Khung iframe hiển thị PDF trực tiếp */
+        .pdf-viewer-frame {
+            width: 100%;
+            height: 580px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+
+        /* Thanh điều hướng slide tiến lùi */
+        .slide-nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+            border-top: 1px dashed #ddd;
+            padding-top: 15px;
+        }
+
+        .slide-nav-buttons .btn-nav {
+            background-color: var(--color-dark);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .slide-nav-buttons .btn-nav:hover {
+            background-color: var(--color-primary);
+        }
+
+        /* --- TRANG TRÌNH BÀY TỔNG KẾT --- */
+        .summary-box {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            margin-top: 20px;
+        }
+
+        /* --- TRANG ABOUT ME --- */
+        .about-section {
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
+            margin-bottom: 40px;
+        }
+        
+        .about-image {
+            flex: 0 0 300px;
+        }
+        
+        .about-image img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .about-content {
+            flex: 1;
+        }
+
+        .about-content ul {
+            list-style: none;
+        }
+        
+        .about-content li {
+            margin-bottom: 15px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .about-content li::before {
+            content: '🎓';
+            position: absolute;
+            left: 0;
+        }
+
+        /* FOOTER */
+        footer {
+            background-color: var(--color-primary);
+            color: white;
+            text-align: center;
+            padding: 25px 20px;
+            margin-top: 60px;
+            font-size: 14px;
+        }
+
+        /* CHUYỂN TAB TRANG CHÍNH */
+        .page {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive di động */
+        @media (max-width: 768px) {
+            .home-grid { grid-template-columns: 1fr; }
+            .projects-btn-group { grid-template-columns: repeat(3, 1fr); }
+            .about-section { flex-direction: column; }
+            .navbar { flex-direction: column; gap: 15px; }
+            .pdf-viewer-frame { height: 420px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-brand">
+            <img src="rinnegan.jpg" alt="Logo" style="height: 24px; width: 24px; object-fit: cover; border-radius: 50%;"> TRỊNH HOÀNG TÚ
+        </div>
+        <div class="nav-links">
+            <a onclick="showPage('home')" id="link-home" class="active">Trang chủ</a>
+            <a onclick="showPage('projects')" id="link-projects">Dự án</a>
+            <a onclick="showPage('summary')" id="link-summary">Tổng kết</a>
+            <a onclick="showPage('about')" id="link-about">About Me</a>
+        </div>
+    </nav>
+
+    <div id="home" class="page active">
+        <div class="banner">
+            <h1>BÀI TẬP DỰ ÁN CÁ NHÂN</h1>
+            <p>Chào mừng bạn đến với Digital Portfolio của Tú!<br>
+            Đây không chỉ là nơi mình lưu trữ những kiến thức từ môn 'Nhập môn Công nghệ số và Trí tuệ nhân tạo', mà còn là hành trình ghi lại sự trưởng thành và nỗ lực làm chủ công nghệ của mình trong suốt thời gian qua.</p>
+        </div>
+        
+        <div class="container">
+            <p style="text-align: center; font-style: italic; color: #555; margin-bottom: 30px;">Mỗi mục dưới đây đều là một trải nghiệm thú vị giúp mình làm quen với thế giới số đầy màu sắc.<br>Mời bạn cùng dạo xem hành trình nhỏ này của mình nhé! 👇</p>
+            
+            <div class="home-grid">
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=500&auto=format&fit=crop" alt="Dự án">
+                    <h3 style="margin-bottom: 15px; color: var(--color-primary)">DỰ ÁN</h3>
+                    <button class="btn" onclick="showPage('projects')">BẤM VÀO DỰ ÁN ĐỂ BIẾT THÊM CHI TIẾT</button>
+                </div>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=500&auto=format&fit=crop" alt="Tổng kết">
+                    <h3 style="margin-bottom: 15px; color: var(--color-primary)">TỔNG KẾT</h3>
+                    <button class="btn" onclick="showPage('summary')">BẤM VÀO TỔNG KẾT ĐỂ BIẾT THÊM CHI TIẾT</button>
+                </div>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1510915228340-29c85a43dcfe?w=500&auto=format&fit=crop" alt="About Me">
+                    <h3 style="margin-bottom: 15px; color: var(--color-primary)">ABOUT ME</h3>
+                    <button class="btn" onclick="showPage('about')">BẤM VÀO ABOUT ME ĐỂ BIẾT THÊM CHI TIẾT</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="projects" class="page">
+        <div class="banner" style="padding: 40px 20px;">
+            <h1 style="margin: 0; font-size: 28px;">HỆ THỐNG BÀI TẬP THÀNH PHẦN</h1>
+        </div>
+        
+        <div class="container" style="max-width: 900px;">
+            <div class="projects-btn-group">
+                <button class="btn tab-bnt" onclick="jumpToSlide(1)" id="tab-ex1">Chương 1</button>
+                <button class="btn tab-bnt" onclick="jumpToSlide(2)" id="tab-ex2">Chương 2</button>
+                <button class="btn tab-bnt" onclick="jumpToSlide(3)" id="tab-ex3">Chương 3</button>
+                <button class="btn tab-bnt" onclick="jumpToSlide(4)" id="tab-ex4">Chương 4</button>
+                <button class="btn tab-bnt" onclick="jumpToSlide(5)" id="tab-ex5">Chương 5</button>
+                <button class="btn tab-bnt" onclick="jumpToSlide(6)" id="tab-ex6">Chương 6</button>
+            </div>
+
+            <div class="slide-container">
+                
+                <div class="exercise-slide active">
+                    <h3 style="color: var(--color-primary); margin-bottom: 5px;">Chương 1: Thao tác cơ bản với tệp tin và thư mục</h3>
+                    <p style="font-size: 14px; color: #666;">Thiết lập cấu trúc thư mục học tập khoa học, áp dụng đúng quy tắc quản lý tệp tin.</p>
+                    
+                    <button class="toggle-pdf-btn" onclick="togglePdf(this)">📄 Xem nội dung bài làm</button>
+                    <div class="pdf-wrapper">
+                        <iframe src="Tuan1 .pdf" class="pdf-viewer-frame"></iframe>
+                    </div>
+                </div>
+
+                <div class="exercise-slide">
+                    <h3 style="color: var(--color-primary); margin-bottom: 5px;">Chương 2: Tìm kiếm và đánh giá thông tin học thuật</h3>
+                    <p style="font-size: 14px; color: #666;">Khai thác dữ liệu học thuật nâng cao và bộ tiêu chí đánh giá tài liệu uy tín.</p>
+                    
+                    <button class="toggle-pdf-btn" onclick="togglePdf(this)">📄 Xem nội dung bài làm</button>
+                    <div class="pdf-wrapper">
+                        <iframe src="Tuan2.pdf" class="pdf-viewer-frame"></iframe>
+                    </div>
+                </div>
+
+                <div class="exercise-slide">
+                    <h3 style="color: var(--color-primary); margin-bottom: 5px;">Chương 3: Viết Prompt hiệu quả cho tác vụ học tập</h3>
+                    <p style="font-size: 14px; color: #666;">Tối ưu hóa câu lệnh để tương tác tốt với các mô hình ngôn ngữ lớn (LLMs).</p>
+                    
+                    <button class="toggle-pdf-btn" onclick="togglePdf(this)">📄 Xem nội dung bài làm</button>
+                    <div class="pdf-wrapper">
+                        <iframe src="Tuan3.pdf" class="pdf-viewer-frame"></iframe>
+                    </div>
+                </div>
+
+                <div class="exercise-slide">
+                    <h3 style="color: var(--color-primary); margin-bottom: 5px;">Chương 4: Sử dụng công cụ hợp tác trực tuyến</h3>
+                    <p style="font-size: 14px; color: #666;">Làm chủ các nền tảng đám mây phối hợp làm việc nhóm và theo dõi tiến độ dự án.</p>
+                    
+                    <button class="toggle-pdf-btn" onclick="togglePdf(this)">📄 Xem nội dung bài làm</button>
+                    <div class="pdf-wrapper">
+                        <iframe src="Tuan4.pdf" class="pdf-viewer-frame"></iframe>
+                    </div>
+                </div>
+
+                <div class="exercise-slide">
+                    <h3 style="color: var(--color-primary); margin-bottom: 5px;">Chương 5: AI tạo sinh hỗ trợ sáng tạo nội dung</h3>
+                    <p style="font-size: 14px; color: #666;">Ứng dụng AI đa phương tiện xây dựng các sản phẩm truyền thông mang đậm dấu ấn cá nhân.</p>
+                    
+                    <button class="toggle-pdf-btn" onclick="togglePdf(this)">📄 Xem nội dung bài làm</button>
+                    <div class="pdf-wrapper">
+                        <iframe src="Tuan5.pdf" class="pdf-viewer-frame"></iframe>
+                    </div>
+                </div>
+
+                <div class="exercise-slide">
+                    <h3 style="color: var(--color-primary); margin-bottom: 5px;">Chương 6: Sử dụng AI có trách nhiệm</h3>
+                    <p style="font-size: 14px; color: #666;">Cam kết và tuân thủ các nguyên tắc đạo đức, tính minh bạch học thuật khi dùng AI.</p>
+                    
+                    <button class="toggle-pdf-btn" onclick="togglePdf(this)">📄 Xem nội dung bài làm</button>
+                    <div class="pdf-wrapper">
+                        <iframe src="Tuan6.pdf" class="pdf-viewer-frame"></iframe>
+                    </div>
+                </div>
+
+                <div class="slide-nav-buttons">
+                    <button class="btn-nav" onclick="changeSlide(-1)">❮ Chương trước</button>
+                    <button class="btn-nav" onclick="changeSlide(1)">Chương tiếp ❯</button>
+                </div>
+            </div>
+            <br>
+            <button class="btn" style="width: auto; background-color: #333;" onclick="showPage('home')">VỀ TRANG CHỦ</button>
+        </div>
+    </div>
+
+    <div id="summary" class="page">
+        <div class="banner" style="padding: 60px 20px;">
+            <h1 style="margin: 0;">Tổng kết <span style="color:var(--color-primary)">_</span></h1>
+        </div>
+        
+        <div class="container">
+            <div class="summary-box">
+                <h2 class="stylized-heading" style="margin-top: 0;">Cảm nhận về hành trình vừa qua ✨</h2>
+                <p>Thoáng cái mà hành trình xây dựng Digital Portfolio này đã đi đến những trang cuối cùng rồi! Từ một người còn bỡ ngỡ với các khái niệm hệ thống sâu, mình đã tự tay gom góp từng bài tập, từng sản phẩm để tạo nên "ngôi nhà số" này. Quá trình thực hiện không chỉ là làm bài tập, mà là lúc mình nhìn lại sự trưởng thành của bản thân qua từng chương học. Có những lúc thức khuya để chỉnh sửa cho ưng ý, nhưng khi nhìn thấy kết quả hoàn chỉnh, mình cảm thấy tự hào và hạnh phúc vô cùng!</p>
+
+                <h2 class="stylized-heading">Những kíp kíp mà mình đã bỏ túi 🎒</h2>
+                <ul style="margin-left: 20px; padding-bottom: 10px;">
+                    <li style="margin-bottom: 10px;"><strong>Làm chủ công nghệ:</strong> Không còn sợ những phần mềm mới, mình đã biết cách sử dụng chúng để sáng tạo nội dung số.</li>
+                    <li style="margin-bottom: 10px;"><strong>Tư duy AI:</strong> Hiểu hơn về Trí tuệ nhân tạo để áp dụng vào việc học một cách thông minh, trách nhiệm và hiệu quả hơn.</li>
+                    <li style="margin-bottom: 10px;"><strong>Kỹ năng trình bày:</strong> Biết cách sắp xếp dữ liệu và thiết kế sao cho vừa khoa học, vừa mang đậm cá tính của mình.</li>
+                </ul>
+
+                <h2 class="stylized-heading">Điểm mình "iu" nhất & Những thử thách nhỏ 🧩</h2>
+                <ul style="margin-left: 20px; padding-bottom: 10px;">
+                    <li style="margin-bottom: 10px;"><strong>Điểm tâm đắc nhất:</strong> Chính là việc mình đã vượt qua giới hạn của bản thân để hoàn thành một Portfolio chỉn chu như thế này. Đặc biệt là phần thực hành AI, nơi mình được thỏa sức bay bổng với các ý tưởng.</li>
+                    <li style="margin-bottom: 10px;"><strong>Thử thách một chút:</strong> Khó khăn nhất là làm sao cân bằng giữa lượng kiến thức khổng lồ và cách trình bày sao cho dễ hiểu, không bị "hack não" người xem. Nhưng nhờ sự kiên trì, mình đã vượt qua được hết!</li>
+                </ul>
+                
+                <p style="font-style: italic; margin-top: 20px;">Lời cuối: Cảm ơn thầy cô và các bạn đã đồng hành cùng Tú trong môn học tuyệt vời này. Đây chắc chắn sẽ là bước đệm vững chắc để mình tiếp tục chinh phục những đỉnh cao công nghệ tiếp theo! ❤️</p>
+            </div>
+            
+            <div style="text-align: center; margin-top: 40px;">
+                <button class="btn" style="width: 200px;" onclick="showPage('home')">Về Trang Chủ</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="about" class="page">
+        <div class="banner" style="padding: 60px 20px;">
+            <h1 style="margin: 0;">About Me <span style="color:var(--color-primary)">_</span></h1>
+        </div>
+        
+        <div class="container">
+            <div class="about-section">
+                <div class="about-image">
+                    <img src="face.jpg" alt="Trịnh Hoàng Tú">
+                </div>
+                <div class="about-content">
+                    <h2 class="stylized-heading" style="margin-top: 0; border: none;">XIN CHÀO, MÌNH LÀ TRỊNH HOÀNG TÚ! ✨</h2>
+                    <ul>
+                        <li>Sinh viên ngành Công nghệ Kỹ thuật Điện tử Viễn thông - Trường Đại học Công nghệ - ĐHQGHN.</li>
+                        <li>MSV: 25022488</li>
+                        <li>Chào mừng bạn đến với Digital Portfolio của mình! Mình là một người trẻ đam mê khám phá thế giới công nghệ và ứng dụng trí tuệ nhân tạo vào cuộc sống và học tập.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2 class="stylized-heading">Mục tiêu và định hướng 🎓</h2>
+            <ul>
+                <li>Rèn luyện tư duy logic, khả năng phân tích và lập trình.</li>
+                <li>Tốt nghiệp xuất sắc, trở thành kỹ sư Viễn thông / Lập trình viên giỏi trong tương lai.</li>
+                <li>Không ngừng cập nhật các xu hướng công nghệ mới như GenAI, IoT.</li>
+            </ul>
+
+            <h2 class="stylized-heading">Mục tiêu của Portfolio 🎯</h2>
+            <ul>
+                <li><strong>Thể hiện năng lực:</strong> Trình bày và minh chứng các kiến thức, kỹ năng công nghệ số đã tích lũy qua chuỗi 6 bài tập thực hành.</li>
+                <li><strong>Lưu trữ và chia sẻ:</strong> Xây dựng một không gian cá nhân để lưu giữ các sản phẩm, dễ dàng truy cập và chia sẻ với nhà tuyển dụng tương lai.</li>
+            </ul>
+        </div>
+    </div>
+
+    <footer>
+        <p>Cảm ơn bạn thật nhiều vì đã ghé thăm góc nhỏ của Tú! Hy vọng những "mảnh ghép" công nghệ mà mình gom góp được ở đây sẽ mang đến cho bạn một chút niềm vui và cảm hứng.</p>
+    </footer>
+
+    <script>
+        // 1. Hàm chuyển đổi các Trang lớn chính
+        function showPage(pageId) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+
+            const links = document.querySelectorAll('.nav-links a');
+            links.forEach(link => link.classList.remove('active'));
+
+            document.getElementById(pageId).classList.add('active');
+            
+            const targetLink = document.getElementById('link-' + pageId);
+            if(targetLink) targetLink.classList.add('active');
+            
+            // Khi vào trang Dự án, tự động bật Slide 1 lên làm mặc định
+            if(pageId === 'projects') {
+                jumpToSlide(1);
+            }
+            
+            window.scrollTo(0, 0);
+        }
+
+        // 2. Logic Slide Bài tập
+        let currentSlideIndex = 1;
+        const totalSlides = 6;
+
+        function jumpToSlide(n) {
+            currentSlideIndex = n;
+            displaySlides(currentSlideIndex);
+        }
+
+        function changeSlide(n) {
+            currentSlideIndex += n;
+            if (currentSlideIndex > totalSlides) { currentSlideIndex = 1; }
+            if (currentSlideIndex < 1) { currentSlideIndex = totalSlides; }
+            displaySlides(currentSlideIndex);
+        }
+
+        function displaySlides(n) {
+            const slides = document.querySelectorAll('.exercise-slide');
+            const tabs = document.querySelectorAll('.tab-bnt');
+            
+            // Ẩn toàn bộ slide cũ và thu gọn khung PDF đang mở của slide cũ lại
+            slides.forEach(slide => {
+                slide.classList.remove('active');
+                const wrapper = slide.querySelector('.pdf-wrapper');
+                const btn = slide.querySelector('.toggle-pdf-btn');
+                if(wrapper) wrapper.classList.remove('visible');
+                if(btn) btn.innerHTML = "📄 Xem nội dung bài làm";
+            });
+            
+            // Tắt sáng màu của các nút cũ
+            tabs.forEach(tab => tab.classList.remove('active-tab'));
+            
+            // Bật hiển thị slide và làm sáng nút chương được chọn
+            slides[n - 1].classList.add('active');
+            const currentTab = document.getElementById('tab-ex' + n);
+            if(currentTab) currentTab.classList.add('active-tab');
+        }
+
+        // 3. Hàm xử lý ẩn hiện file PDF cục bộ trong slide
+        function togglePdf(buttonElement) {
+            const pdfWrapper = buttonElement.nextElementSibling;
+            
+            if (pdfWrapper.classList.contains('visible')) {
+                pdfWrapper.classList.remove('visible');
+                buttonElement.innerHTML = "📄 Xem nội dung bài làm";
+            } else {
+                pdfWrapper.classList.add('visible');
+                buttonElement.innerHTML = "❌ Thu gọn tệp tin bài làm";
+            }
+        }
+    </script>
+</body>
+</html>
